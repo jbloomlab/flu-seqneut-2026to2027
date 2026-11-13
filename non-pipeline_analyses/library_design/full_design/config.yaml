@@ -26,9 +26,11 @@ select_recent_haplotype_files:
   H3N2:
     - data/barri_h3n2.txt
     - data/huddlej_h3n2.txt
+    - data/turners_h3n2.txt
   H1N1:
     - data/barri_h1n1pdm.txt
     - data/huddlej_h1n1pdm.txt
+    - data/turners_h1n1pdm.txt
 
 # Manual exclusions, as names from the derived_haplotype column. Annotate each
 # entry with why it is excluded.
@@ -39,13 +41,21 @@ override_select_recent_haplotypes:
     # via manually_fixed_recent_H3N2_haplotypes.tsv below.
     - K:N94S,S156G,K160A,V223I
   H1N1:
+    # A/India_PUN/NIV_26_1111/2026 has ambiguous HA2 residues (X) at 204-205.
+    # Re-added with G and A, the D.3.1.1 consensus there, via
+    # manually_fixed_recent_H1N1_haplotypes.tsv below.
+    - D.3.1.1:S137Y,D139N
+    # A/England/1962657/2026 has ambiguous HA1 residues (X) at 39 and 187.
+    # Re-added with G and D, the D.3.1.1 consensus there, via the same file.
+    - D.3.1.1:A135S,D139N
 
 # Additional haplotypes to include, e.g. older strains or manually fixed
 # haplotypes whose ambiguous/missing residues have been resolved.
 additional_haplotypes:
   H3N2:
     - data/manually_fixed_recent_H3N2_haplotypes.tsv
-  H1N1: []
+  H1N1:
+    - data/manually_fixed_recent_H1N1_haplotypes.tsv
 
 # GFF files interconverting sequential and HA1 / HA2 numbering
 gffs:

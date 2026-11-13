@@ -1,12 +1,12 @@
 INFO: Loaded 1505 past-sequence rows for excluded lookup.
-INFO: Built selection_file lookup from 1 TSV(s): 0 (strain, protein) keys, 56 strain-only keys.
-INFO: Read 58 rows from results/plasmid_log/2026-11-13_full-design.csv
-INFO: Total plasmid-log rows: 58
-INFO: Read 18 rows from results/excluded_from_order/2026-11-13_full-design_excluded.csv
-INFO: Total excluded rows: 18
+INFO: Built selection_file lookup from 1 TSV(s): 0 (strain, protein) keys, 76 strain-only keys.
+INFO: Read 76 rows from results/plasmid_log/2026-11-13_full-design.csv
+INFO: Total plasmid-log rows: 76
+INFO: Read 20 rows from results/excluded_from_order/2026-11-13_full-design_excluded.csv
+INFO: Total excluded rows: 20
 INFO: Loaded 19 vaccine annotations from data/vaccine_annotations.csv.
 WARNING: excluded strain 'A/MexicoCity/INER-INF_612/2026' (matched_against='SN-01138;SN-01139;SN-01148;SN-01149'): matched IDs ['SN-01138', 'SN-01139', 'SN-01148', 'SN-01149'] are not sequential (found 1139 then 1148).
-INFO: Excluded → final-library: emitted 35 rows (skipped 0 intra-order duplicates, 2 cross-order duplicates; 0 IDs missing in past-sequences lookup).
+INFO: Excluded → final-library: emitted 39 rows (skipped 0 intra-order duplicates, 2 cross-order duplicates; 0 IDs missing in past-sequences lookup).
 INFO: Loaded 9 additional-vaccine sequences from data/additional_vaccine_constructs.csv.
 INFO: Additional vaccine constructs → final-library: emitted 26 rows.
 INFO: Applied vaccine annotation overrides to 28 final-library rows.
@@ -15,22 +15,25 @@ INFO: Loaded 5 collection-date references from data/manual_collection_dates.csv 
 INFO: Loaded 111 collection-date references from data/flu-seqneut-2025to2026-barcode-to-strain-designed.csv (date column 'collection_date').
 INFO: Loaded 109 collection-date references from data/flu-seqneut-2025-barcode-to-strain_designed.csv (date column 'num_date').
 INFO: Back-filled collection_date for 35 final-library rows.
-INFO: Final library CSV written (119 rows): results/final_library/final_library.csv
-INFO: Haplotypes file written (25 unique haplotypes): results/final_library/H1N1_final_haplotypes.txt
-INFO: Haplotypes file written (38 unique haplotypes): results/final_library/H3N2_final_haplotypes.txt
-INFO: Final library summary: 65 unique strains (by strain + protein_sequence_HA_ectodomain) across 2 subtype(s).
+INFO: Final library CSV written (141 rows): results/final_library/final_library.csv
+INFO: Haplotypes file written (36 unique haplotypes): results/final_library/H1N1_final_haplotypes.txt
+INFO: Haplotypes file written (47 unique haplotypes): results/final_library/H3N2_final_haplotypes.txt
+INFO: Final library summary: 85 unique strains (by strain + protein_sequence_HA_ectodomain) across 2 subtype(s).
 INFO: Per-subtype totals (need_to_order True / False):
-INFO:   H1N1: 25 total (15 to order, 10 already exist)
-INFO:   H3N2: 40 total (23 to order, 17 already exist)
+INFO:   H1N1: 36 total (26 to order, 10 already exist)
+INFO:   H3N2: 49 total (30 to order, 19 already exist)
 INFO: Per-subtype breakdown by selection_file:
 INFO:   H1N1:
 INFO:     (none): 4 total (0 to order, 4 already exist)
 INFO:     barri_h1n1pdm.txt: 1 total (1 to order, 0 already exist)
 INFO:     barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2 total (1 to order, 1 already exist)
 INFO:     huddlej_h1n1pdm.txt: 18 total (13 to order, 5 already exist)
+INFO:     manually_fixed_recent_H1N1_haplotypes.tsv: 2 total (2 to order, 0 already exist)
+INFO:     turners_h1n1pdm.txt: 9 total (9 to order, 0 already exist)
 INFO:   H3N2:
 INFO:     (none): 5 total (0 to order, 5 already exist)
 INFO:     barri_h3n2.txt,huddlej_h3n2.txt: 8 total (2 to order, 6 already exist)
 INFO:     huddlej_h3n2.txt: 26 total (20 to order, 6 already exist)
 INFO:     manually_fixed_recent_H3N2_haplotypes.tsv: 1 total (1 to order, 0 already exist)
+INFO:     turners_h3n2.txt: 9 total (7 to order, 2 already exist)
 INFO: Done.

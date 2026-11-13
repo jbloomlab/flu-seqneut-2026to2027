@@ -23,23 +23,23 @@ extra_barcode_haplotypes:
   - K:F79I,S145N,K207Q # score_total 0.85, count 1
   - K:F79I,K135T,K207Q # score_total 0.84, count 6
   - K:F79I,K207Q,V223I # score_total 0.82, count 1
+  - K:K207Q,R220K # score_total 0.71, count 1
   - K:F79I,D158N,K207Q,P227S # score_total 0.68, count 1
   - K:N6D,V223I # score_total 0.67, count 13
   - K:N6D,S95G,S145N,V223I # score_total 0.66, count 15
-  - K:D104G,A328T # score_total 0.64, count 69
-  - K:K135E,D158N,I214T # score_total 0.60, count 1
-  - K:G62E,K135E,S145R # score_total 0.59, count 9 (tied on score with K:N6D,S95G,S145N,L157S at count 1; higher count wins)
+  - K:S91N,N190T,R222K # score_total 0.66, count 1
+  - K:E119D,S145N # score_total 0.65, count 1
   # H1N1, top 10 by score_total among newly ordered haplotypes
   - D.3.1.1:D139N,V152I,G155E,R205K # score_total 1.52, count 12
+  - D.3.1.1:D139N,V152I,G155E,S157T # score_total 1.27, count 3
   - D.3.1.1:N130K,D139N,V152I,G155E # score_total 1.23, count 5
   - D.3.1.1:D139N,V152I,G155E,S190R # score_total 1.23, count 5
   - D.3.1.1:D139N,V152I,G155E,E235K # score_total 1.16, count 41
   - D.3.1.1:D139N,V152I,G155E,I166T # score_total 1.14, count 2
+  - D.3.1.1:D139N,A141E,V152I,G155E # score_total 1.14, count 1
+  - D.3.1.1:D129N,D139N,V152I,G155E # score_total 1.13, count 7
   - D.3.1.1:D139N,V152I,G155E,K156R # score_total 1.10, count 1
-  - D.3.1.1:D139N,S157L,S190G,L314M # score_total 1.02, count 10
-  - D.3.1.1:D139N,S157L # score_total 0.98, count 41
-  - D.3.1.1:D139N,G155E,E235K # score_total 0.92, count 1
-  - D.3.1.1:N130S,D139N,G155E # score_total 0.88, count 3
+  - D.3.1.1:H138Q,D139N,V152I,G155E # score_total 1.04, count 3
 
 random_seed: 202611111200
 contributor: Andrew Butler

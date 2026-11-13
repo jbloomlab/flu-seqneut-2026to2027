@@ -2,8 +2,9 @@
 Reading selection files...
   data/barri_h3n2.txt: 8 haplotype name(s)
   data/huddlej_h3n2.txt: 35 haplotype name(s)
-  Total unique haplotype names across all selection files: 35
-  Haplotype names matched in TSV: 35
+  data/turners_h3n2.txt: 9 haplotype name(s)
+  Total unique haplotype names across all selection files: 44
+  Haplotype names matched in TSV: 44
 
 Warning: 2 haplotype(s) have no HA2 sequence and will be marked invalid.
 
@@ -16,11 +17,12 @@ Validation complete:
   HA2 valid: 2554/2659 (96.1%)
   Both valid: 2475/2659 (93.1%)
   Any invalid: 184/2659 (6.9%)
-  Selected haplotypes: 34/2659 (1.3%)
+  Selected haplotypes: 43/2659 (1.6%)
   Total sequences (valid): 14,865
-  Total sequences (selected): 7,934
+  Total sequences (selected): 8,036
   selection_file value counts (non-null):
     huddlej_h3n2.txt: 27
+    turners_h3n2.txt: 9
     barri_h3n2.txt,huddlej_h3n2.txt: 8
   Report: results/recent_haplotype_validation/H3N2_validation_report.txt
   Scatter plot: results/recent_haplotype_validation/H3N2_count_scatter.pdf
