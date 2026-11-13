@@ -1,0 +1,11 @@
+# Local (non-slurm) profile, for running on a workstation such as labbox.
+# Mirrors ../config.yaml but drops the slurm executor, which is unavailable
+# off-cluster. Rules here need biopython, supplied by the `constructs` env.
+#
+# Usage, from the pipeline directory:
+#   snakemake --profile profiles/local
+executor: local
+cores: 4
+use-conda: true
+conda-frontend: conda
+latency-wait: 60
