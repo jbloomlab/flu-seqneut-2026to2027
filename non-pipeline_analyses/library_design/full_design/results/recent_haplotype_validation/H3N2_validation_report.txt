@@ -1,0 +1,67 @@
+HA Sequence Validation Report
+============================================================
+
+Input file: data/2027-Feb-VCM-seqneut-library-strain-selection-H3N2.tsv
+
+Sequence Length Check:
+  HA1 sequences: all have length 329 ✓
+  HA2 sequences: all present sequences have length 221 ✓
+  HA2 sequences: 2 missing (treated as invalid)
+
+Amino Acid Validity Check:
+  Total haplotypes: 2659
+
+  HA1 (representative_strain_ha1_sequence):
+    Valid:   2524 (94.9%)
+    Invalid: 135 (5.1%)
+    Invalid characters: ['-', 'X']
+    Examples:
+      J.2.4:T65K,D104G,S124N,S144N,N158D,I160K,T328A: contains ['X']
+      K:K238N,A304P: contains ['X']
+      K:S96R,K207Q,P239S: contains ['X']
+      K:S145N,V223I: contains ['X']
+      K:V223I,I242M,R299K,V309I: contains ['X']
+
+  HA2 (representative_ha2_sequence):
+    Valid:   2554 (96.1%)
+    Invalid: 105 (3.9%) (includes 2 missing)
+    Invalid characters: ['-', 'X']
+    Examples:
+      K:R150K,K207Q,V223I,S312N: contains ['X']
+      K:V223I,I242M,P273L,V309I: contains ['X']
+      K:G78S,S95C,V223I,I242M,V309I: contains ['X']
+      K:V223I,I242M,K264E,V309I: contains ['X']
+      K:S96R,K207Q,P239S: contains ['X']
+    Haplotypes with missing HA2 sequence:
+      K:M168V,A328T (strain: A/Slovenia/NLZOH-521-857/2026)
+      K:T12K,S205F,L244M (strain: FS-26-5158)
+
+  Combined validity (both segments must pass):
+    Both valid:       2475 (93.1%)
+    HA1 invalid only: 79 (3.0%)
+    HA2 invalid only: 49 (1.8%)
+    Both invalid:     56 (2.1%)
+
+  Total sequences (valid haplotypes):   14,865
+  Total sequences (invalid haplotypes): 225
+  Total sequences (all):                15,090
+
+Haplotype Selection:
+  Selection files: data/barri_h3n2.txt data/huddlej_h3n2.txt
+  Total unique haplotype names in selection files: 35
+  Override exclusions: 1 haplotype(s) specified
+  Excluded via override: 1 haplotype(s)
+    - K:N94S,S156G,K160A,V223I (strain: A/Colombia/ANT-LDSP17095/2026, count: 1, selection_file: huddlej_h3n2.txt)
+  Selected haplotypes: 34 (1.3%)
+  Total sequences (selected haplotypes): 7,934
+  ✓ All selected haplotypes have valid HA1 and HA2 sequences
+
+  selection_file value counts (non-null):
+    huddlej_h3n2.txt: 27
+    barri_h3n2.txt,huddlej_h3n2.txt: 8
+
+Sequence Count Distribution:
+  Total sequences represented: 15090
+  Mean sequences per haplotype: 5.7
+  Median sequences per haplotype: 1
+  Max sequences for a haplotype: 4156

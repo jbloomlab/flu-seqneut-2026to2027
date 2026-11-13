@@ -1,0 +1,6 @@
+# Snakemake working directories (includes multi-GB materialized conda envs)
+.snakemake/
+
+# Python bytecode
+__pycache__/
+*.py[cod]

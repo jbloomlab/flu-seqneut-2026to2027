@@ -1,0 +1,61 @@
+HA Sequence Validation Report
+============================================================
+
+Input file: data/2027-Feb-VCM-seqneut-library-strain-selection-H1N1.tsv
+
+Sequence Length Check:
+  HA1 sequences: all have length 327 ✓
+  HA2 sequences: all present sequences have length 222 ✓
+
+Amino Acid Validity Check:
+  Total haplotypes: 1386
+
+  HA1 (representative_strain_ha1_sequence):
+    Valid:   1350 (97.4%)
+    Invalid: 36 (2.6%)
+    Invalid characters: ['-', 'X']
+    Examples:
+      D.3.1.1:D139N,V152I,G155E,R205K,E302K: contains ['X']
+      D.3.1.1:Q54K,V152I,G155E,R205K,E302K: contains ['X']
+      D.3.1.1:V19L,D139N,V152I,G155E,A261T,P271S: contains ['X']
+      D.3.1.1:V19I,R205K,V321I: contains ['X']
+      D.3.1.1:A120T,D139N,V152I,G155E,K259R,E260D: contains ['X']
+
+  HA2 (representative_ha2_sequence):
+    Valid:   1337 (96.5%)
+    Invalid: 49 (3.5%)
+    Invalid characters: ['-', 'X']
+    Examples:
+      D.3.1.1:D139N,V152I,G155E,R205K,E302K: contains ['X']
+      D.3.1.1:Q54K,V152I,G155E,R205K,E302K: contains ['X']
+      D.3.1.1:A120T,D139N,V152I,G155E,K259R,E260D: contains ['X']
+      D.3.1.1:D139N,V152I,G155E,D168N,G170E: contains ['X']
+      D.3.1.1:D139N,S157L,V321I: contains ['X']
+
+  Combined validity (both segments must pass):
+    Both valid:       1312 (94.7%)
+    HA1 invalid only: 25 (1.8%)
+    HA2 invalid only: 38 (2.7%)
+    Both invalid:     11 (0.8%)
+
+  Total sequences (valid haplotypes):   9,128
+  Total sequences (invalid haplotypes): 91
+  Total sequences (all):                9,219
+
+Haplotype Selection:
+  Selection files: data/barri_h1n1pdm.txt data/huddlej_h1n1pdm.txt
+  Total unique haplotype names in selection files: 21
+  Selected haplotypes: 21 (1.5%)
+  Total sequences (selected haplotypes): 5,769
+  ✓ All selected haplotypes have valid HA1 and HA2 sequences
+
+  selection_file value counts (non-null):
+    huddlej_h1n1pdm.txt: 18
+    barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
+    barri_h1n1pdm.txt: 1
+
+Sequence Count Distribution:
+  Total sequences represented: 9219
+  Mean sequences per haplotype: 6.7
+  Median sequences per haplotype: 1
+  Max sequences for a haplotype: 1641
