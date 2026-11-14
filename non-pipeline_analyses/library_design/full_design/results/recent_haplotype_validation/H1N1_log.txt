@@ -1,12 +1,13 @@
 
 Reading selection files...
   data/barri_h1n1pdm.txt: 3 haplotype name(s)
-  data/huddlej_h1n1pdm.txt: 20 haplotype name(s)
+  data/huddlej_h1n1pdm.txt: 30 haplotype name(s)
   data/turners_h1n1pdm.txt: 11 haplotype name(s)
-  Total unique haplotype names across all selection files: 32
-  Haplotype names matched in TSV: 32
+  Total unique haplotype names across all selection files: 42
+  Haplotype names matched in TSV: 42
 
-Excluding 2 haplotype(s) via override_select_recent_haplotypes:
+Excluding 3 haplotype(s) via override_select_recent_haplotypes:
+  - D.3.1.1:D139N,L176M,V234L (strain: A/Ohio/49/2026, count: 2, valid_sequence: False, selection_file: huddlej_h1n1pdm.txt)
   - D.3.1.1:S137Y,D139N (strain: A/India_PUN/NIV_26_1111/2026, count: 1, valid_sequence: False, selection_file: turners_h1n1pdm.txt)
   - D.3.1.1:A135S,D139N (strain: A/England/1962657/2026, count: 1, valid_sequence: False, selection_file: turners_h1n1pdm.txt)
 Validation complete:
@@ -16,11 +17,11 @@ Validation complete:
   HA2 valid: 1337/1386 (96.5%)
   Both valid: 1312/1386 (94.7%)
   Any invalid: 74/1386 (5.3%)
-  Selected haplotypes: 30/1386 (2.2%)
+  Selected haplotypes: 39/1386 (2.8%)
   Total sequences (valid): 9,128
-  Total sequences (selected): 5,789
+  Total sequences (selected): 5,820
   selection_file value counts (non-null):
-    huddlej_h1n1pdm.txt: 18
+    huddlej_h1n1pdm.txt: 28
     turners_h1n1pdm.txt: 11
     barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
     barri_h1n1pdm.txt: 1

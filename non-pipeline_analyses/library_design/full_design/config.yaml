@@ -48,6 +48,9 @@ override_select_recent_haplotypes:
     # A/England/1962657/2026 has ambiguous HA1 residues (X) at 39 and 187.
     # Re-added with G and D, the D.3.1.1 consensus there, via the same file.
     - D.3.1.1:A135S,D139N
+    # A/Ohio/49/2026 has ambiguous HA2 residues (X) at 116 and 145.
+    # Re-added with K and D, the D.3.1.1 consensus there, via the same file.
+    - D.3.1.1:D139N,L176M,V234L
 
 # Additional haplotypes to include, e.g. older strains or manually fixed
 # haplotypes whose ambiguous/missing residues have been resolved.

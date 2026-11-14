@@ -19,16 +19,16 @@ n_barcodes: 1  # barcodes per strain, for every strain not listed below
 # by higher sequence `count`. Scores/counts below are from the design input TSVs.
 extra_barcode_haplotypes:
   # H3N2, top 10 by score_total among newly ordered haplotypes
+  - K:K135E,S145R,A304P,A328T # score_total 0.90, count 1
   - K:S9G,N81D,V223I,I260M # score_total 0.85, count 114
   - K:F79I,S145N,K207Q # score_total 0.85, count 1
   - K:F79I,K135T,K207Q # score_total 0.84, count 6
   - K:F79I,K207Q,V223I # score_total 0.82, count 1
+  - K:K135E,K207Q # score_total 0.78, count 1
+  - K:N6D,K135E,V223I,P273S,A328T # score_total 0.72, count 2
+  - K:S9G,N81D,K135E,D188E,V223I,I260M # score_total 0.71, count 4
   - K:K207Q,R220K # score_total 0.71, count 1
-  - K:F79I,D158N,K207Q,P227S # score_total 0.68, count 1
-  - K:N6D,V223I # score_total 0.67, count 13
-  - K:N6D,S95G,S145N,V223I # score_total 0.66, count 15
-  - K:S91N,N190T,R222K # score_total 0.66, count 1
-  - K:E119D,S145N # score_total 0.65, count 1
+  - K:K135N,S145N,K207R # score_total 0.69, count 1
   # H1N1, top 10 by score_total among newly ordered haplotypes
   - D.3.1.1:D139N,V152I,G155E,R205K # score_total 1.52, count 12
   - D.3.1.1:D139N,V152I,G155E,S157T # score_total 1.27, count 3
@@ -38,8 +38,8 @@ extra_barcode_haplotypes:
   - D.3.1.1:D139N,V152I,G155E,I166T # score_total 1.14, count 2
   - D.3.1.1:D139N,A141E,V152I,G155E # score_total 1.14, count 1
   - D.3.1.1:D129N,D139N,V152I,G155E # score_total 1.13, count 7
+  - D.3.1.1:Q54H,D139N,G155E,D168E # score_total 1.12, count 1
   - D.3.1.1:D139N,V152I,G155E,K156R # score_total 1.10, count 1
-  - D.3.1.1:H138Q,D139N,V152I,G155E # score_total 1.04, count 3
 
 random_seed: 202611111200
 contributor: Andrew Butler

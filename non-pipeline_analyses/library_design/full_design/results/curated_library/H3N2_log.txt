@@ -1,8 +1,8 @@
 Read 2475 validated haplotypes from results/recent_haplotype_validation/H3N2_valid_haplotypes.tsv
-  Selected: 43
-  Non-selected: 2432
+  Selected: 63
+  Non-selected: 2412
   selection_file value counts (non-null):
-    huddlej_h3n2.txt: 26
+    huddlej_h3n2.txt: 46
     turners_h3n2.txt: 9
     barri_h3n2.txt,huddlej_h3n2.txt: 8
 
@@ -12,8 +12,8 @@ Read 1 additional haplotypes from data/manually_fixed_recent_H3N2_haplotypes.tsv
   selection_file: manually_fixed_recent_H3N2_haplotypes.tsv
 
 Combined dataframe contains 2476 total haplotypes
-  Selected: 44
-  Non-selected: 2432
+  Selected: 64
+  Non-selected: 2412
 
 Created combined HA1+HA2 sequence column 'representative_strain_ha1_ha2_sequence'
   ✓ All representative_strain values are unique
@@ -49,15 +49,15 @@ Computing HA1 epitope-specific distances to nearest HA1 library strain...
 
 Outputs:
   Selected haplotypes: results/curated_library/H3N2_selected_haplotypes.tsv
-    44 haplotypes
+    64 haplotypes
     selection_file value counts:
-      huddlej_h3n2.txt: 26
+      huddlej_h3n2.txt: 46
       turners_h3n2.txt: 9
       barri_h3n2.txt,huddlej_h3n2.txt: 8
       manually_fixed_recent_H3N2_haplotypes.tsv: 1
   Non-selected haplotypes: results/curated_library/H3N2_nonselected_haplotypes.tsv
-    2432 haplotypes
+    2412 haplotypes
   Library FASTA: results/curated_library/H3N2_library_haplotypes.fa
-    44 sequences (combined HA1+HA2)
+    64 sequences (combined HA1+HA2)
 
 Curation complete ✓
