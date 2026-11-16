@@ -634,6 +634,7 @@ def build_additional_vaccine_rows(
     include: dict[str, dict],
     past_files: list[str],
     already_present_sequences: set[str],
+    preferred_vector: str = "",
 ) -> list[dict]:
     """
     Pull existing constructs whose HA ectodomain matches one of `include`'s
@@ -646,9 +647,12 @@ def build_additional_vaccine_rows(
     reference file (`include`) since the construct log lacks them for these older
     strains. Sequences already present in the library
     (`already_present_sequences`) are skipped, and duplicate constructs (same
-    strain + protein + plasmid id) are emitted once. Fails fast if a requested
-    sequence is not found in any construct log, so a missing construct is not
-    silently dropped. Remaining metadata (vaccine_annotation, collection_date,
+    strain + protein + plasmid id) are emitted once. When a reference's HA was
+    cloned into several vectors and `preferred_vector` is one of them, only that
+    vector's constructs are kept; a reference found in just one vector is
+    unaffected, including when that vector is not the preferred one. Fails fast
+    if a requested sequence is not found in any construct log, so a missing
+    construct is not silently dropped. Remaining metadata (vaccine_annotation, collection_date,
     ...) is filled by the later HA-sequence override/fallback passes, as for
     excluded rows.
     """
@@ -699,6 +703,25 @@ def build_additional_vaccine_rows(
             ]
             if name_matched:
                 rows = name_matched
+        # The same HA was sometimes cloned into more than one vector (e.g. both
+        # pHW2000 and pHH21), which would otherwise emit one library row per
+        # vector with identical barcodes. Keep only the preferred vector's
+        # constructs, but ONLY when that vector is actually present: most older
+        # vaccine references exist solely in pHH21, and filtering unconditionally
+        # would drop them from the library entirely.
+        vectors_present = {(r.get("vector") or "").strip() for r in rows}
+        if preferred_vector and len(vectors_present) > 1:
+            preferred_rows = [
+                r for r in rows if (r.get("vector") or "").strip() == preferred_vector
+            ]
+            if preferred_rows:
+                dropped = len(rows) - len(preferred_rows)
+                log.info(
+                    f"{meta.get('strain', '<unnamed>')}: found constructs in "
+                    f"{sorted(v for v in vectors_present if v)}; keeping "
+                    f"{preferred_vector} only ({dropped} row(s) dropped)."
+                )
+                rows = preferred_rows
         for row in rows:
             log_seq = (row.get("protein_sequence_HA_ectodomain") or "").strip()
             new_row = {col: row.get(col, "") for col in FINAL_LIBRARY_FIELDNAMES}
@@ -944,6 +967,7 @@ def main():
             load_additional_vaccine_sequences(additional_vaccine_files),
             past_files,
             already_present_seqs,
+            preferred_vector=(config.get("vector") or "").strip(),
         )
 
     final_rows = kept + excluded + extra_vaccine_rows
