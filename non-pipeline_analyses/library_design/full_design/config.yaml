@@ -53,12 +53,28 @@ override_select_recent_haplotypes:
     - D.3.1.1:D139N,L176M,V234L
 
 # Additional haplotypes to include, e.g. older strains or manually fixed
-# haplotypes whose ambiguous/missing residues have been resolved.
+# haplotypes whose ambiguous/missing residues have been resolved. Every row in
+# these files is forced to selected_haplotype=True, and `selection_file` is set
+# to the file's basename, so the categories stay distinguishable downstream all
+# the way into construct_order's final_library.csv.
 additional_haplotypes:
   H3N2:
     - data/manually_fixed_recent_H3N2_haplotypes.tsv
   H1N1:
     - data/manually_fixed_recent_H1N1_haplotypes.tsv
+
+# Provisional haplotypes: those with no representative sequence in the
+# recent-haplotypes TSVs at all, whose HA1 is reconstructed from the subclade
+# backbone rather than observed. Plain-text lists, one derived_haplotype per
+# line; the build_provisional_haplotypes rule expands each into a TSV that joins
+# `additional_haplotypes` above. Edit these lists, never the generated TSVs.
+#
+# See data/README_provisional_haplotypes.md. Adding entries requires re-freezing
+# the GenBank match (see freeze_genbank_match above), since the reconstructed
+# sequences are not in GenBank. Leave a subtype empty or omit it for none.
+provisional_haplotypes:
+  H3N2: data/provisional_h3n2.txt
+  H1N1: data/provisional_h1n1pdm.txt
 
 # GFF files interconverting sequential and HA1 / HA2 numbering
 gffs:

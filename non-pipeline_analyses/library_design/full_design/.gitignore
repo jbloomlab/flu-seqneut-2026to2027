@@ -10,3 +10,4 @@ results/aggregated_library_strains/*
 !results/recent_haplotype_validation
 !results/site_annotations
 !results/tree/*.json
+!results/provisional_haplotypes

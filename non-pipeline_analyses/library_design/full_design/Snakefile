@@ -105,11 +105,54 @@ rule create_site_annotations:
     script:
         "scripts/create_site_annotations.py"
 
+# Rule to build provisional-haplotype TSVs from plain lists of haplotype names.
+#
+# Provisional haplotypes have no representative sequence in the recent-haplotypes TSV,
+# so one is reconstructed from the subclade backbone (see
+# data/README_provisional_haplotypes.md). The generated TSV is pipeline output rather
+# than committed input, so the hand-maintained list is the single source of truth and a
+# stale TSV cannot silently disagree with it.
+rule build_provisional_haplotypes:
+    input:
+        haplotype_list=lambda wildcards: config["provisional_haplotypes"][wildcards.subtype],
+        vcm_tsv=lambda wildcards: config["recent_haplotypes"][wildcards.subtype],
+        script="scripts/build_provisional_haplotypes.py",
+    output:
+        tsv="results/provisional_haplotypes/{subtype}_provisional_haplotypes.tsv"
+    log:
+        "results/provisional_haplotypes/{subtype}_log.txt"
+    conda:
+        "environment.yml"
+    shell:
+        """
+        python {input.script} \
+            --vcm-tsv {input.vcm_tsv} \
+            --haplotype-list {input.haplotype_list} \
+            --output {output.tsv} &> {log}
+        """
+
+
+def additional_haplotype_files(subtype):
+    """Files feeding `additional_haplotypes` for a subtype.
+
+    Combines the committed files listed under `additional_haplotypes` in config.yaml with
+    the generated provisional-haplotype TSV, when `provisional_haplotypes` names a list
+    for this subtype. Both arrive at curate_library_sequences the same way; only their
+    provenance differs.
+    """
+    files = list(config.get("additional_haplotypes", {}).get(subtype) or [])
+    if config.get("provisional_haplotypes", {}).get(subtype):
+        files.append(
+            f"results/provisional_haplotypes/{subtype}_provisional_haplotypes.tsv"
+        )
+    return files
+
+
 # Rule to curate library sequences by combining validated and additional haplotypes
 rule curate_library_sequences:
     input:
         valid_haplotypes="results/recent_haplotype_validation/{subtype}_valid_haplotypes.tsv",
-        additional_haplotypes=lambda wildcards: config.get("additional_haplotypes", {}).get(wildcards.subtype) or [],
+        additional_haplotypes=lambda wildcards: additional_haplotype_files(wildcards.subtype),
         gff="results/gffs/{subtype}_genemap.gff",
         site_annotations="results/site_annotations/{subtype}_site_annotations.tsv"
     output:

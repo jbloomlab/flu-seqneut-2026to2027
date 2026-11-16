@@ -1,0 +1,10 @@
+Read 1386 haplotypes from data/2027-Feb-VCM-seqneut-library-strain-selection-H1N1.tsv
+Backbones: D.3.1 (A/SouthAfrica/PATH-CERI-C076784/2026, count 268), D.3.1.1 (A/Victoria/199/2026, count 1641)
+
+Read 4 haplotype(s) from data/provisional_h1n1pdm.txt
+  D.3.1.1:N130K,D139N,G155E: HA1 327 aa, HA2 222 aa (backbone A/Victoria/199/2026)
+  D.3.1.1:A135S,D139N,G155E: HA1 327 aa, HA2 222 aa (backbone A/Victoria/199/2026)
+  D.3.1.1:S137Y,D139N,G155E: HA1 327 aa, HA2 222 aa (backbone A/Victoria/199/2026)
+  D.3.1.1:D139N,G155E,S190T: HA1 327 aa, HA2 222 aa (backbone A/Victoria/199/2026)
+
+Wrote 4 provisional haplotype(s) to results/provisional_haplotypes/H1N1_provisional_haplotypes.tsv
