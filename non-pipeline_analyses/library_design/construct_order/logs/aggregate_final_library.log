@@ -8,15 +8,18 @@ INFO: Loaded 19 vaccine annotations from data/vaccine_annotations.csv.
 WARNING: excluded strain 'A/MexicoCity/INER-INF_612/2026' (matched_against='SN-01138;SN-01139;SN-01148;SN-01149'): matched IDs ['SN-01138', 'SN-01139', 'SN-01148', 'SN-01149'] are not sequential (found 1139 then 1148).
 INFO: Excluded → final-library: emitted 49 rows (skipped 0 intra-order duplicates, 2 cross-order duplicates; 0 IDs missing in past-sequences lookup).
 INFO: Loaded 14 additional-vaccine sequences from data/additional_vaccine_constructs.csv.
+INFO: A/Darwin/1454/2025: found constructs in ['pHH21', 'pHW2000']; keeping pHW2000 only (2 row(s) dropped).
+INFO: A/Missouri/11/2025_egg: found constructs in ['pHH21', 'pHW2000']; keeping pHW2000 only (2 row(s) dropped).
+INFO: A/Singapore/GP20238/2024: found constructs in ['pHH21', 'pHW2000']; keeping pHW2000 only (2 row(s) dropped).
 INFO: additional_vaccine_constructs already in library, not re-added: 1 sequence(s).
-INFO: Additional vaccine constructs → final-library: emitted 42 rows.
-INFO: Applied vaccine annotation overrides to 44 final-library rows.
+INFO: Additional vaccine constructs → final-library: emitted 36 rows.
+INFO: Applied vaccine annotation overrides to 38 final-library rows.
 INFO: Applied vaccine strain-name overrides to 2 final-library rows.
 INFO: Loaded 5 collection-date references from data/manual_collection_dates.csv (date column 'collection_date').
 INFO: Loaded 111 collection-date references from data/flu-seqneut-2025to2026-barcode-to-strain-designed.csv (date column 'collection_date').
 INFO: Loaded 109 collection-date references from data/flu-seqneut-2025-barcode-to-strain_designed.csv (date column 'num_date').
 INFO: Back-filled collection_date for 39 final-library rows.
-INFO: Final library CSV written (204 rows): results/final_library/final_library.csv
+INFO: Final library CSV written (198 rows): results/final_library/final_library.csv
 INFO: Haplotypes file written (53 unique haplotypes): results/final_library/H1N1_final_haplotypes.txt
 INFO: Haplotypes file written (76 unique haplotypes): results/final_library/H3N2_final_haplotypes.txt
 INFO: Final library summary: 131 unique strains (by strain + protein_sequence_HA_ectodomain) across 2 subtype(s).

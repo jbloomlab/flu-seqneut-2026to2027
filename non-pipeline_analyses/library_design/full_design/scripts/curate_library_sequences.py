@@ -719,7 +719,33 @@ def curate_library_sequences(valid_haplotypes_path, additional_haplotypes_paths,
     # tiebreaker so rows sharing a hamming distance always come out in the same
     # order; without it the output row order is non-deterministic across runs
     # (the distance column is heavily tied), producing spurious diffs.
-    df_selected = df_selected.sort_values('hamming_distance_nearest_library_strain_ha1_ha2', ascending=True)
+    #
+    # Provisional haplotypes sort last within the selected set, after the
+    # distance sort. They have no deposited isolate, so they are the rows most
+    # likely to be dropped or revised later (a real sequence appears, or the
+    # reconstruction is superseded). Keeping them at the end means construct_order
+    # -- which assigns shortnames, barcodes and plate positions positionally by
+    # this row order -- gives them the highest indices, so removing one does not
+    # renumber any observed haplotype. `provisional` arrives from the input TSVs
+    # as True only for provisional rows and empty/NaN otherwise, and the dtype
+    # varies (bool when every row is provisional, object when mixed), so coerce
+    # to a plain bool rather than relying on it. mergesort keeps this stable, so
+    # the distance ordering above is preserved within each group.
+    if 'provisional' in df_selected.columns:
+        is_provisional = (
+            df_selected['provisional']
+            .map(lambda v: str(v).strip().lower() in {'true', '1', 'yes'})
+            .astype(bool)
+        )
+    else:
+        is_provisional = pd.Series(False, index=df_selected.index)
+
+    df_selected = df_selected.sort_values(
+        'hamming_distance_nearest_library_strain_ha1_ha2', ascending=True
+    )
+    df_selected = df_selected.loc[
+        is_provisional.reindex(df_selected.index).sort_values(kind='mergesort').index
+    ]
     df_nonselected = df_nonselected.sort_values(
         ['hamming_distance_nearest_library_strain_ha1_ha2', 'representative_strain'],
         ascending=[False, True],
