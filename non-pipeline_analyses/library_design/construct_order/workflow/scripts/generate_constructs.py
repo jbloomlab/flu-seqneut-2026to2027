@@ -11,9 +11,20 @@ Usage:
         --config              config.yaml \
         --output-order-csv    results/orders/H3-testset.csv \
         --output-log-csv      results/plasmid_log/2026-05-12_H3-testset.csv \
-        --output-excluded-csv results/excluded_from_order/2026-05-12_H3-testset_excluded.csv
+        --output-excluded-csv results/excluded_from_order/2026-05-12_H3-testset_excluded.csv \
+        --prior-order-logs    results/plasmid_log/2026-01-01_earlier-order.csv
 
 Intended for use in a Snakemake pipeline (one invocation per order).
+
+Orders are cumulative: each one must avoid the barcodes and HA ectodomain sequences
+already consumed by the orders before it. Those predecessors are named explicitly via
+`--prior-order-logs`, which the Snakefile populates from its `prior_orders` input.
+
+Do NOT discover them by globbing results/plasmid_log/ instead. That directory also holds
+the output of this invocation and of any earlier run under a different date, so a glob
+makes the script read its own results: regenerating an existing order then excludes
+nearly every strain as an "existing sequence". Taking the list from Snakemake keeps a
+re-run idempotent no matter what is left in results/.
 """
 
 import argparse
@@ -68,19 +79,24 @@ def load_past_barcodes(barcode_files: list[str]) -> set[str]:
     return barcodes
 
 
-def load_existing_order_barcodes(log_dir: Path = Path("results/plasmid_log")) -> set[str]:
+def load_prior_order_barcodes(prior_order_logs: list[str]) -> set[str]:
     """
-    Read any existing log CSVs in results/plasmid_log/ and return their barcodes.
-    This ensures we don't duplicate barcodes across orders, even across pipeline runs.
+    Read the plasmid-log CSVs of the orders preceding this one and return their barcodes,
+    so barcodes are never reused across orders.
+
+    `prior_order_logs` comes from the Snakefile's `prior_orders` input, not from globbing
+    results/plasmid_log/ -- see the module docstring for why that distinction matters.
     """
-    log_files = list(log_dir.glob("*.csv"))
-    if not log_files:
+    if not prior_order_logs:
         return set()
 
     barcodes = set()
-    for path in log_files:
-        barcodes |= _barcodes_from_csv(path)
-    log.info(f"Loaded {len(barcodes)} unique barcodes from {len(log_files)} existing log file(s).")
+    for path in prior_order_logs:
+        barcodes |= _barcodes_from_csv(Path(path))
+    log.info(
+        f"Loaded {len(barcodes)} unique barcodes from "
+        f"{len(prior_order_logs)} prior order log(s)."
+    )
     return barcodes
 
 
@@ -129,15 +145,18 @@ def _merge_seq_id_maps(
 
 def load_past_protein_sequences(
     dedicated_files: list[str],
-    log_dir: Path = Path("results/plasmid_log"),
+    prior_order_logs: list[str] | None = None,
 ) -> dict[str, list[str]]:
     """
     Build a dict mapping known protein_sequence_HA_ectodomain values to a list of
     identifiers (construct_id from dedicated file(s); bloom_lab_plasmid_log_id from
-    existing log CSVs) that share that sequence.
+    prior order logs) that share that sequence.
 
     Identifier lists can contain multiple entries when several past constructs map
     to the same protein sequence.
+
+    `prior_order_logs` comes from the Snakefile's `prior_orders` input, not from globbing
+    results/plasmid_log/ -- see the module docstring for why that distinction matters.
     """
     seq_to_ids: dict[str, list[str]] = {}
 
@@ -151,16 +170,15 @@ def load_past_protein_sequences(
         f"{len(dedicated_files)} dedicated file(s)."
     )
 
-    log_files = list(log_dir.glob("*.csv"))
-    if log_files:
+    if prior_order_logs:
         n_before = len(seq_to_ids)
-        for path in log_files:
+        for path in prior_order_logs:
             _merge_seq_id_maps(
                 seq_to_ids,
-                _protein_seqs_from_csv(path, id_column="bloom_lab_plasmid_log_id"),
+                _protein_seqs_from_csv(Path(path), id_column="bloom_lab_plasmid_log_id"),
             )
         log.info(
-            f"Loaded protein sequences from {len(log_files)} existing log file(s); "
+            f"Loaded protein sequences from {len(prior_order_logs)} prior order log(s); "
             f"total unique sequences now {len(seq_to_ids)} (added {len(seq_to_ids) - n_before} new)."
         )
 
@@ -859,6 +877,18 @@ def main():
     parser.add_argument("--output-order-csv",    required=True, help="Output path for order CSV.")
     parser.add_argument("--output-log-csv",      required=True, help="Output path for log CSV.")
     parser.add_argument("--output-excluded-csv", required=True, help="Output path for excluded CSV.")
+    parser.add_argument(
+        "--prior-order-logs",
+        nargs="*",
+        default=[],
+        metavar="CSV",
+        help=(
+            "Plasmid-log CSVs of the orders preceding this one, whose barcodes and HA "
+            "ectodomain sequences this order must avoid. The Snakefile supplies these from "
+            "its `prior_orders` input; empty for the first order. Never pass a glob of "
+            "results/plasmid_log/ -- see the module docstring."
+        ),
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -869,8 +899,22 @@ def main():
         barcode_files = [barcode_files]
     random.seed(config["random_seed"])
 
+    # Guard the invariant the --prior-order-logs design exists to protect: this order must
+    # never treat its own output as a predecessor, or it would exclude its own strains as
+    # already-existing sequences. Fail loudly rather than silently emptying the order.
+    prior_order_logs = list(args.prior_order_logs)
+    own_output = Path(args.output_log_csv).resolve()
+    self_referential = [p for p in prior_order_logs if Path(p).resolve() == own_output]
+    if self_referential:
+        raise ValueError(
+            f"--prior-order-logs contains this order's own output log "
+            f"({args.output_log_csv}). Prior orders are the ones *preceding* this order; "
+            f"including its own output makes it exclude its own strains as existing "
+            f"sequences."
+        )
+
     past_barcodes = load_past_barcodes(barcode_files)
-    past_barcodes |= load_existing_order_barcodes()
+    past_barcodes |= load_prior_order_barcodes(prior_order_logs)
 
     # ------------------------------------------------------------------
     # Protein-sequence dedup: load known sequences and filter input rows
@@ -880,7 +924,7 @@ def main():
     protein_seq_files = config.get("past_protein_sequences_to_avoid", []) or []
     if isinstance(protein_seq_files, str):
         protein_seq_files = [protein_seq_files]
-    past_protein_sequences = load_past_protein_sequences(protein_seq_files)
+    past_protein_sequences = load_past_protein_sequences(protein_seq_files, prior_order_logs)
 
     input_rows = read_input_tsv(order_config["input_file"])
 

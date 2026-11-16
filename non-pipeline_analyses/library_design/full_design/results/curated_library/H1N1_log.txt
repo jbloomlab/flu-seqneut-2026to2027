@@ -1,9 +1,9 @@
 Read 1312 validated haplotypes from results/recent_haplotype_validation/H1N1_valid_haplotypes.tsv
-  Selected: 39
-  Non-selected: 1273
+  Selected: 40
+  Non-selected: 1272
   selection_file value counts (non-null):
     huddlej_h1n1pdm.txt: 27
-    turners_h1n1pdm.txt: 9
+    turners_h1n1pdm.txt: 10
     barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
     barri_h1n1pdm.txt: 1
 
@@ -12,9 +12,14 @@ Read 3 additional haplotypes from data/manually_fixed_recent_H1N1_haplotypes.tsv
   All additional haplotypes are marked as selected
   selection_file: manually_fixed_recent_H1N1_haplotypes.tsv
 
-Combined dataframe contains 1315 total haplotypes
-  Selected: 42
-  Non-selected: 1273
+Read 4 additional haplotypes from results/provisional_haplotypes/H1N1_provisional_haplotypes.tsv
+  Input format: split
+  All additional haplotypes are marked as selected
+  selection_file: H1N1_provisional_haplotypes.tsv
+
+Combined dataframe contains 1319 total haplotypes
+  Selected: 47
+  Non-selected: 1272
 
 Created combined HA1+HA2 sequence column 'representative_strain_ha1_ha2_sequence'
   ✓ All representative_strain values are unique
@@ -26,10 +31,10 @@ Created combined HA1+HA2 sequence column 'representative_strain_ha1_ha2_sequence
   ✓ All 'representative_strain_ha1_ha2_sequence' sequences contain only valid amino acids
 
 Computing HA1 Hamming distances to nearest library strain...
-  Computed HA1 Hamming distances for 1315 haplotypes
+  Computed HA1 Hamming distances for 1319 haplotypes
 
 Computing HA1+HA2 Hamming distances to nearest library strain...
-  Computed HA1+HA2 Hamming distances for 1315 haplotypes
+  Computed HA1+HA2 Hamming distances for 1319 haplotypes
   Selected hamming_distance_nearest_library_strain_ha1: range 1-3
   Non-selected hamming_distance_nearest_library_strain_ha1: range 1-14
   Selected hamming_distance_nearest_library_strain_ha1_ha2: range 1-4
@@ -40,22 +45,23 @@ Reading site annotations from results/site_annotations/H1N1_site_annotations.tsv
     Caton_epitope: 50 HA1 sites
 
 Computing HA1 epitope-specific distances to nearest HA1 library strain...
-  Caton_epitope_distance: computed for 1315 haplotypes
+  Caton_epitope_distance: computed for 1319 haplotypes
   Selected Caton_epitope_distance: range 0-1
   Non-selected Caton_epitope_distance: range 0-5
 
 Outputs:
   Selected haplotypes: results/curated_library/H1N1_selected_haplotypes.tsv
-    42 haplotypes
+    47 haplotypes
     selection_file value counts:
       huddlej_h1n1pdm.txt: 27
-      turners_h1n1pdm.txt: 9
+      turners_h1n1pdm.txt: 10
+      H1N1_provisional_haplotypes.tsv: 4
       manually_fixed_recent_H1N1_haplotypes.tsv: 3
       barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
       barri_h1n1pdm.txt: 1
   Non-selected haplotypes: results/curated_library/H1N1_nonselected_haplotypes.tsv
-    1273 haplotypes
+    1272 haplotypes
   Library FASTA: results/curated_library/H1N1_library_haplotypes.fa
-    42 sequences (combined HA1+HA2)
+    47 sequences (combined HA1+HA2)
 
 Curation complete ✓

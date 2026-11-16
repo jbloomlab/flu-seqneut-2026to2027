@@ -54,7 +54,10 @@ rule generate_constructs:
         past_barcodes=config["past_barcodes_to_avoid"],
         config="config.yaml",
         annotation_file=config["annotation_file"] if config.get("annotation_file") else [],
-        # depend on all previously defined orders to force sequential execution
+        # Plasmid logs of the orders preceding this one. These both force sequential
+        # execution and are passed to the script as --prior-order-logs, so it avoids
+        # exactly their barcodes and sequences -- never its own output or a stale log
+        # left in results/ from an earlier run. See the script's module docstring.
         prior_orders=lambda wildcards: [
             f"results/plasmid_log/{ORDERS[order]['date']}_{order}.csv"
             for order in ORDERS
@@ -74,6 +77,7 @@ rule generate_constructs:
             --output-order-csv {output.order_csv} \
             --output-log-csv   {output.log_csv} \
             --output-excluded-csv {output.excluded_csv} \
+            --prior-order-logs {input.prior_orders} \
         > {log} 2>&1
         """
 

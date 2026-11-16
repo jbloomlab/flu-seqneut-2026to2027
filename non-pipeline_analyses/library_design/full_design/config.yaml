@@ -69,9 +69,9 @@ additional_haplotypes:
 # line; the build_provisional_haplotypes rule expands each into a TSV that joins
 # `additional_haplotypes` above. Edit these lists, never the generated TSVs.
 #
-# See data/README_provisional_haplotypes.md. Adding entries requires re-freezing
-# the GenBank match (see freeze_genbank_match above), since the reconstructed
-# sequences are not in GenBank. Leave a subtype empty or omit it for none.
+# See the README. Adding entries requires re-freezing the GenBank match (see
+# freeze_genbank_match above), since the reconstructed sequences are not in
+# GenBank. Leave a subtype empty or omit it for none.
 provisional_haplotypes:
   H3N2: data/provisional_h3n2.txt
   H1N1: data/provisional_h1n1pdm.txt

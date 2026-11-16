@@ -10,14 +10,16 @@ haplotype's HA1 mutations.
 HA2 is taken from the backbone unmodified. `derived_haplotype` encodes HA1 mutations only, so
 it does not constrain HA2, and there is no way to infer the "correct" HA2 for a haplotype never
 observed. The backbone HA2 is the modal HA2 within its clade by a wide margin (90.1% of K-clade
-and 92.9% of D.3.1.1 sequences by count). See data/README_provisional_haplotypes.md.
+and 92.9% of D.3.1.1 sequences by count).
 
 The reconstruction is validated by the `--self-test` mode, which applies it to every haplotype
 in the VCM TSV that *does* have a representative sequence and reports how often it reproduces
 the observed HA1.
 
 Writes the TSV that `additional_haplotypes` in config.yaml consumes. Every row is marked
-`provisional = TRUE`, and `representative_strain` is `{derived_haplotype}_provisional`.
+`provisional = TRUE`, and `representative_strain` is the haplotype with filename-unsafe
+characters replaced, plus a `_provisional` suffix (see UNSAFE_IN_FILENAME) -- e.g.
+`K:N190T` -> `K_N190T_provisional`.
 """
 import argparse
 import csv
@@ -26,6 +28,29 @@ import sys
 
 
 MUT_RE = re.compile(r"^([A-Z])(\d+)([A-Z])$")
+
+# Characters in a derived_haplotype that are not safe in a filename. construct_order's
+# generate_constructs.py builds GenBank filenames from the strain name and sanitizes only
+# '/', so ':' and ',' would survive into filenames -- legal on Linux, but hostile to
+# Windows/macOS shares and to anything parsing these paths. Both map to '_', matching how
+# real strain names (A/HongKong/324/2026 -> A_HongKong_324_2026) already sanitize.
+#
+# The mapping is deliberately lossy: the strain name is an identifier, not an encoding.
+# `derived_haplotype` is carried as its own column through library_strains.tsv, the plasmid
+# log, and final_library.csv, so nothing needs to recover the haplotype from the name.
+UNSAFE_IN_FILENAME = {":": "_", ",": "_"}
+
+
+def provisional_strain_name(haplotype):
+    """Build the `representative_strain` value for a provisional haplotype.
+
+    Returns `{filename-safe haplotype}_provisional`, e.g.
+    `D.3.1.1:N130K,D139N` -> `D.3.1.1_N130K_D139N_provisional`.
+    """
+    name = haplotype
+    for unsafe, replacement in UNSAFE_IN_FILENAME.items():
+        name = name.replace(unsafe, replacement)
+    return f"{name}_provisional"
 
 # Column order of the generated TSV. The three sequence/strain columns are hard
 # requirements of curate_library_sequences.py; derived_haplotype, representative_strain,
@@ -183,22 +208,26 @@ def self_test(by_haplotype, backbones):
     exact = 0
     ambiguous_only = 0
     genuine = []
-    skipped = 0
+    # Skips are broken out by cause so that "could not test" is never confused with
+    # "reconstruction failed". A no_backbone skip is expected for clades with no bare-clade
+    # row; a wt_mismatch skip would mean the method is wrong and is surfaced separately.
+    skips = {"missing_sequence": [], "no_backbone": [], "other_error": [], "length": []}
 
     for haplotype, row in by_haplotype.items():
         if ":" not in haplotype:
             continue
         observed = row["representative_strain_ha1_sequence"]
         if not observed or not row["representative_ha2_sequence"]:
-            skipped += 1
+            skips["missing_sequence"].append(haplotype)
             continue
         try:
             built, _, _ = reconstruct(haplotype, backbones)
-        except ValueError:
-            skipped += 1
+        except ValueError as err:
+            key = "no_backbone" if "no backbone row" in str(err) else "other_error"
+            skips[key].append((haplotype, str(err)))
             continue
         if len(built) != len(observed):
-            skipped += 1
+            skips["length"].append(haplotype)
             continue
 
         if built == observed:
@@ -216,11 +245,27 @@ def self_test(by_haplotype, backbones):
             genuine.append((haplotype, diffs))
 
     total = exact + ambiguous_only + len(genuine)
-    print(f"  compared:                      {total} haplotypes ({skipped} skipped)")
-    print(f"  reproduced observed HA1 exactly: {exact}")
+    n_skipped = sum(len(v) for v in skips.values())
+    print(f"  compared:                        {total} haplotypes")
+    print(f"  reproduced observed HA1 exactly:   {exact}")
     print(f"  differed only at ambiguous (X) positions in the observed sequence: "
           f"{ambiguous_only}")
-    print(f"  genuine disagreements:           {len(genuine)}")
+    print(f"  genuine disagreements:             {len(genuine)}")
+    print(f"  not testable ({n_skipped}):")
+    print(f"    no backbone row for the clade:   {len(skips['no_backbone'])}")
+    print(f"    missing HA1 or HA2 in the input: {len(skips['missing_sequence'])}")
+    print(f"    sequence length mismatch:        {len(skips['length'])}")
+    print(f"    other reconstruction error:      {len(skips['other_error'])}")
+
+    # A no_backbone skip is structural and expected. An other_error skip means reconstruct()
+    # rejected a haplotype that the input says exists -- e.g. a wild-type residue disagreeing
+    # with the backbone -- which indicates the method is wrong, so fail on it.
+    if skips["other_error"]:
+        print("\n  UNEXPECTED RECONSTRUCTION ERRORS (method may be unsound):")
+        for haplotype, err in skips["other_error"][:10]:
+            print(f"    {haplotype}: {err}")
+        if len(skips["other_error"]) > 10:
+            print(f"    ... and {len(skips['other_error']) - 10} more")
 
     if genuine:
         print("\n  GENUINE DISAGREEMENTS (reconstruction is unsound):")
@@ -229,9 +274,8 @@ def self_test(by_haplotype, backbones):
             print(f"    {haplotype}: {len(diffs)} diff(s) -- {shown}")
         if len(genuine) > 10:
             print(f"    ... and {len(genuine) - 10} more")
-        return False
 
-    return True
+    return not genuine and not skips["other_error"]
 
 
 def main():
@@ -267,13 +311,19 @@ def main():
     haplotypes = read_haplotype_list(args.haplotype_list)
     print(f"\nRead {len(haplotypes)} haplotype(s) from {args.haplotype_list}")
 
-    # A haplotype with an observed representative belongs in a selection .txt file, where it
-    # keeps its real strain name, count, collection date, and exact GenBank accession.
+    # A haplotype with a *complete* observed representative belongs in a selection .txt file,
+    # where it keeps its real strain name, count, collection date, and exact GenBank accession.
     # Listing it here would select it twice over, with construct_order's dedup dropping one
     # copy by row order rather than by which record is better.
+    #
+    # Both sequences must be present to count as observed: curation needs HA1 and HA2, so a
+    # row with one of them is unusable as-is and is a legitimate candidate for reconstruction.
+    # (The 2027-Feb H3N2 input has two such rows, with HA1 but no HA2.)
     already_observed = [
         h for h in haplotypes
-        if h in by_haplotype and by_haplotype[h]["representative_strain_ha1_sequence"]
+        if h in by_haplotype
+        and by_haplotype[h]["representative_strain_ha1_sequence"]
+        and by_haplotype[h]["representative_ha2_sequence"]
     ]
     if already_observed:
         lines = [
@@ -298,7 +348,7 @@ def main():
             "n_countries": 0,
             "n_regions": 0,
             "latest_sequence": "",
-            "representative_strain": f"{haplotype}_provisional",
+            "representative_strain": provisional_strain_name(haplotype),
             "representative_strain_ha1_sequence": ha1,
             "representative_ha2_sequence": ha2,
             "days_since_latest_sequence": "",
@@ -310,10 +360,25 @@ def main():
 
     # Guard the uniqueness invariant curate_library_sequences.py enforces, so a collision
     # is reported here with context rather than as a bare duplicate-strain error later.
+    # The haplotype -> strain-name mapping is lossy (see UNSAFE_IN_FILENAME), so distinct
+    # haplotypes could in principle sanitize to one name. Report the colliding haplotypes,
+    # not just the name, since the fix is to rename one of them.
     strains = [r["representative_strain"] for r in rows]
     if len(set(strains)) != len(strains):
-        dupes = sorted({s for s in strains if strains.count(s) > 1})
-        raise ValueError(f"Duplicate representative_strain value(s): {dupes}")
+        collisions = {}
+        for row in rows:
+            collisions.setdefault(row["representative_strain"], []).append(
+                row["derived_haplotype"]
+            )
+        lines = [
+            f"  - '{name}' <- {haps}"
+            for name, haps in sorted(collisions.items())
+            if len(haps) > 1
+        ]
+        raise ValueError(
+            "Distinct haplotypes sanitized to the same representative_strain:\n"
+            + "\n".join(lines)
+        )
 
     ha1_lengths = {len(r["representative_strain_ha1_sequence"]) for r in rows}
     ha2_lengths = {len(r["representative_ha2_sequence"]) for r in rows}

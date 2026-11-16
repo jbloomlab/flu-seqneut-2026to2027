@@ -103,7 +103,7 @@ subtype_params:
 #   plasmid_start_idx: first plasmid number, or a plate name such as plate16
 orders:
   full-design:
-    date: 2026-11-13
+    date: 2026-11-16
     library: 'flu-seqneut-2026to2027'
     shortname_h1n1_idx: 1
     shortname_h3n2_idx: 1

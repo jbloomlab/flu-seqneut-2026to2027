@@ -108,10 +108,9 @@ rule create_site_annotations:
 # Rule to build provisional-haplotype TSVs from plain lists of haplotype names.
 #
 # Provisional haplotypes have no representative sequence in the recent-haplotypes TSV,
-# so one is reconstructed from the subclade backbone (see
-# data/README_provisional_haplotypes.md). The generated TSV is pipeline output rather
-# than committed input, so the hand-maintained list is the single source of truth and a
-# stale TSV cannot silently disagree with it.
+# so one is reconstructed from the subclade backbone (see the README). The generated
+# TSV is pipeline output rather than committed input, so the hand-maintained list is the
+# single source of truth and a stale TSV cannot silently disagree with it.
 rule build_provisional_haplotypes:
     input:
         haplotype_list=lambda wildcards: config["provisional_haplotypes"][wildcards.subtype],
