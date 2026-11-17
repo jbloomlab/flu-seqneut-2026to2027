@@ -21,7 +21,7 @@ INFO: Loaded 109 collection-date references from data/flu-seqneut-2025-barcode-t
 INFO: Back-filled collection_date for 39 final-library rows.
 INFO: Final library CSV written (198 rows): results/final_library/final_library.csv
 INFO: Haplotypes file written (53 unique haplotypes): results/final_library/H1N1_final_haplotypes.txt
-INFO: Haplotypes file written (76 unique haplotypes): results/final_library/H3N2_final_haplotypes.txt
+INFO: Haplotypes file written (78 unique haplotypes): results/final_library/H3N2_final_haplotypes.txt
 INFO: Final library summary: 131 unique strains (by strain + protein_sequence_HA_ectodomain) across 2 subtype(s).
 INFO: Per-subtype totals (need_to_order True / False):
 INFO:   H1N1: 53 total (40 to order, 13 already exist)
