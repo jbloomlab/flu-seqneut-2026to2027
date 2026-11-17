@@ -1,10 +1,14 @@
 Read 1312 validated haplotypes from results/recent_haplotype_validation/H1N1_valid_haplotypes.tsv
-  Selected: 40
-  Non-selected: 1272
+  Selected: 45
+  Non-selected: 1267
   selection_file value counts (non-null):
-    huddlej_h1n1pdm.txt: 27
-    turners_h1n1pdm.txt: 10
-    barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
+    huddlej_h1n1pdm.txt: 23
+    turners_h1n1pdm.txt: 9
+    ruchnewitzd_h1n1pdm.txt: 5
+    huddlej_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 4
+    barri_h1n1pdm.txt,huddlej_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 1
+    turners_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 1
+    barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 1
     barri_h1n1pdm.txt: 1
 
 Read 3 additional haplotypes from data/manually_fixed_recent_H1N1_haplotypes.tsv
@@ -18,8 +22,8 @@ Read 4 additional haplotypes from results/provisional_haplotypes/H1N1_provisiona
   selection_file: H1N1_provisional_haplotypes.tsv
 
 Combined dataframe contains 1319 total haplotypes
-  Selected: 47
-  Non-selected: 1272
+  Selected: 52
+  Non-selected: 1267
 
 Created combined HA1+HA2 sequence column 'representative_strain_ha1_ha2_sequence'
   ✓ All representative_strain values are unique
@@ -51,17 +55,21 @@ Computing HA1 epitope-specific distances to nearest HA1 library strain...
 
 Outputs:
   Selected haplotypes: results/curated_library/H1N1_selected_haplotypes.tsv
-    47 haplotypes
+    52 haplotypes
     selection_file value counts:
-      huddlej_h1n1pdm.txt: 27
-      turners_h1n1pdm.txt: 10
+      huddlej_h1n1pdm.txt: 23
+      turners_h1n1pdm.txt: 9
+      ruchnewitzd_h1n1pdm.txt: 5
+      huddlej_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 4
       H1N1_provisional_haplotypes.tsv: 4
       manually_fixed_recent_H1N1_haplotypes.tsv: 3
-      barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 2
+      barri_h1n1pdm.txt,huddlej_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 1
+      turners_h1n1pdm.txt,ruchnewitzd_h1n1pdm.txt: 1
+      barri_h1n1pdm.txt,huddlej_h1n1pdm.txt: 1
       barri_h1n1pdm.txt: 1
   Non-selected haplotypes: results/curated_library/H1N1_nonselected_haplotypes.tsv
-    1272 haplotypes
+    1267 haplotypes
   Library FASTA: results/curated_library/H1N1_library_haplotypes.fa
-    47 sequences (combined HA1+HA2)
+    52 sequences (combined HA1+HA2)
 
 Curation complete ✓

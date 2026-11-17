@@ -27,10 +27,12 @@ select_recent_haplotype_files:
     - data/barri_h3n2.txt
     - data/huddlej_h3n2.txt
     - data/turners_h3n2.txt
+    - data/ruchnewitzd_h3n2.txt
   H1N1:
     - data/barri_h1n1pdm.txt
     - data/huddlej_h1n1pdm.txt
     - data/turners_h1n1pdm.txt
+    - data/ruchnewitzd_h1n1pdm.txt
 
 # Manual exclusions, as names from the derived_haplotype column. Annotate each
 # entry with why it is excluded.
@@ -40,6 +42,10 @@ override_select_recent_haplotypes:
     # residue (X) at position 159. Re-added with N, the K clade consensus there,
     # via manually_fixed_recent_H3N2_haplotypes.tsv below.
     - K:N94S,S156G,K160A,V223I
+    # Representative strain A/Indonesia/BIOKES-I-TNA-385/2026 has an ambiguous HA1
+    # residue (X) at position 1. Re-added with Q, the K clade consensus there
+    # (13896/13927 = 99.8% of K-clade sequences by count), via the same file.
+    - K:N126K
   H1N1:
     # A/India_PUN/NIV_26_1111/2026 has ambiguous HA2 residues (X) at 204-205.
     # Re-added with G and A, the D.3.1.1 consensus there, via
