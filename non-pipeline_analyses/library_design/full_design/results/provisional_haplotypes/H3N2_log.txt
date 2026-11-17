@@ -1,0 +1,9 @@
+Read 2659 haplotypes from data/2027-Feb-VCM-seqneut-library-strain-selection-H3N2.tsv
+Backbones: J.2.3 (A/MatoGrossoDoSul/LEIAL8184/2026, count 16), J.2.4 (A/Madagascar/1149/2026, count 2), J.2.4.2 (A/Zacapa/FLU-227/2026, count 480), J.2.5 (A/Cayman/26InfM314/2026, count 1), K (A/Romania/439/2026, count 4156)
+
+Read 3 haplotype(s) from data/provisional_h3n2.txt
+  K:N190T: HA1 329 aa, HA2 221 aa (backbone A/Romania/439/2026)
+  K:F79I,K207Q,F195Y: HA1 329 aa, HA2 221 aa (backbone A/Romania/439/2026)
+  K:S145N,N126K: HA1 329 aa, HA2 221 aa (backbone A/Romania/439/2026)
+
+Wrote 3 provisional haplotype(s) to results/provisional_haplotypes/H3N2_provisional_haplotypes.tsv

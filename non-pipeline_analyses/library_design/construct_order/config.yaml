@@ -1,0 +1,113 @@
+
+############################### Configure insert design ############################################
+# TEMPLATE for the 2026-2027 season. The insert-design parameters below are
+# properties of Bloom lab vector 5764 and carry over unchanged; the file paths
+# and the `orders` section need to be filled in for this season. See the
+# equivalent file in flu-seqneut-2026 for a worked example.
+
+start_codon: "ATGAAG"
+special_start_codons: null
+n_barcodes: 1  # barcodes per strain, for every strain not listed below
+
+# Haplotypes getting `n_barcodes` + 1 instead, as exact `derived_haplotype` names
+# copied verbatim from library_strains.tsv (mutation order is significant). An
+# entry matching no strain in the order is a hard error, so typos and haplotypes
+# dropped by sequence dedup fail loudly.
+#
+# Selected as: per subtype, the top 10 by `score_total` among haplotypes newly
+# ordered this round (excluding those dropped as `existing_sequence`), ties broken
+# by higher sequence `count`. Scores/counts below are from the design input TSVs.
+extra_barcode_haplotypes:
+  # H3N2, top 10 by score_total among newly ordered haplotypes
+  - K:K135E,S145R,A304P,A328T # score_total 0.90, count 1
+  - K:S9G,N81D,V223I,I260M # score_total 0.85, count 114
+  - K:F79I,S145N,K207Q # score_total 0.85, count 1
+  - K:F79I,K135T,K207Q # score_total 0.84, count 6
+  - K:F79I,K207Q,V223I # score_total 0.82, count 1
+  - K:K135E,K207Q # score_total 0.78, count 1
+  - K:N6D,K135E,V223I,P273S,A328T # score_total 0.72, count 2
+  - K:S9G,N81D,K135E,D188E,V223I,I260M # score_total 0.71, count 4
+  - K:K207Q,R220K # score_total 0.71, count 1
+  - K:K135N,S145N,K207R # score_total 0.69, count 1
+  # H1N1, top 10 by score_total among newly ordered haplotypes
+  - D.3.1.1:D139N,V152I,G155E,R205K # score_total 1.52, count 12
+  - D.3.1.1:D139N,V152I,G155E,S157T # score_total 1.27, count 3
+  - D.3.1.1:N130K,D139N,V152I,G155E # score_total 1.23, count 5
+  - D.3.1.1:D139N,V152I,G155E,S190R # score_total 1.23, count 5
+  - D.3.1.1:D139N,V152I,G155E,E235K # score_total 1.16, count 41
+  - D.3.1.1:D139N,V152I,G155E,I166T # score_total 1.14, count 2
+  - D.3.1.1:D139N,A141E,V152I,G155E # score_total 1.14, count 1
+  - D.3.1.1:D129N,D139N,V152I,G155E # score_total 1.13, count 7
+  - D.3.1.1:Q54H,D139N,G155E,D168E # score_total 1.12, count 1
+  - D.3.1.1:D139N,V152I,G155E,K156R # score_total 1.10, count 1
+
+random_seed: 202611111200
+contributor: Andrew Butler
+vector: pHW2000
+
+# Construct logs / designed-barcode CSVs from prior rounds, so that neither
+# barcodes nor HA ectodomain sequences are duplicated.
+past_barcodes_to_avoid:
+  - "data/2026-11-13_seqneut_construct_log.csv"
+past_protein_sequences_to_avoid:
+  - "data/2026-11-13_seqneut_construct_log.csv"
+
+# Vaccine annotations for the plasmid log, keyed on protein_sequence_HA_ectodomain.
+# Add rows as new vaccine strains enter the library.
+annotation_file: "data/vaccine_annotations.csv"
+
+# Back-fill a missing `collection_date` in the final library. Each file needs
+# `protein_sequence_HA_ectodomain` and `collection_date` columns; matching is by
+# ectodomain sequence and only fills empty cells, never overwriting. Decimal-year
+# dates (2025.76) become YYYY-MM-DD. First match wins, so list curated dates first.
+collection_date_reference_files:
+  - "data/manual_collection_dates.csv"
+  - "data/flu-seqneut-2025to2026-barcode-to-strain-designed.csv"
+  - "data/flu-seqneut-2025-barcode-to-strain_designed.csv"
+
+# Existing vaccine-reference constructs to pull explicitly into the final library,
+# keyed on `protein_sequence_HA_ectodomain`. Each is carried in with the shortname,
+# barcode, and plasmid id it already has. Errors if one is not in the construct log.
+additional_vaccine_constructs:
+  - "data/additional_vaccine_constructs.csv"
+
+subtype_params:
+  H3N2:
+    append_additional_upstream_sequence: ''
+    ectodomain_start: 48  # 16x3, start after first 16 amino acids
+    ectodomain_length: 1551  # 517x3, continue for 517 amino acids
+    # H3 endodomain and WSN CT
+    endodomain_sequence: 'atcaagggagttgagctgaagtcaggatacaaagattggatcctatggatttcctttgccATGtcTtgCttCCtActGtgCgtAgcACtACtAggCttTatTatgtgggcGtgTcaGaaAggCtcCCtAcaAtgTCgGatTtgTatTTAATAG'
+  H1N1:
+    append_additional_upstream_sequence: 'ata'  # 20th aa of upstream WSN signal peptide
+    ectodomain_start: 60  # 20x3, start after first 20 amino acids
+    ectodomain_length: 1560  # 520x3, continue for 520 amino acids
+    # WSN endodomain and CT
+    endodomain_sequence: 'aaattggaatcaatgggagtgtatcagattctggcgatatattctacagtggcaagctccttagtactgctagtttctttaggagcgattagcttttggatgtgctccaacggCtcCCtAcaAtgTCgGatTtgTatTTAATAG'
+
+###################################### Orders ######################################################
+# One entry per order. Orders are processed in the listed sequence, each aware of
+# the barcodes and sequences used by the ones before it, so keep them in
+# chronological order and append new ones at the end.
+#
+# Required fields, as in the example below:
+#   date: YYYY-MM-DD the order was placed
+#   library: library name recorded in the plasmid log
+#   shortname_h1n1_idx / shortname_h3n2_idx: first shortname index per subtype
+#   input_file: library_strains.tsv from the corresponding design subdirectory
+#   full_sequence: True for individually ordered constructs, False for plate format
+#   h1n1_offset / h3n2_offset: optional nt trimmed off the 5' end of that subtype's
+#     sequence before the ectodomain slice; default 0. H1N1 needs 9 (3 codons) here
+#     because library_strains.tsv carries 3 extra residues ahead of where this
+#     vector's insert starts.
+#   plasmid_start_idx: first plasmid number, or a plate name such as plate16
+orders:
+  full-design:
+    date: 2026-11-16
+    library: 'flu-seqneut-2026to2027'
+    shortname_h1n1_idx: 1
+    shortname_h3n2_idx: 1
+    input_file: "../full_design/results/aggregated_library_strains/library_strains.tsv"
+    full_sequence: False
+    h1n1_offset: 9
+    plasmid_start_idx: plate23

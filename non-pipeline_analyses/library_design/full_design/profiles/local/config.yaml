@@ -1,0 +1,13 @@
+# Local (non-slurm) profile, for running on a workstation such as labbox.
+# Mirrors ../config.yaml but drops the slurm executor, which is unavailable
+# off-cluster. `use-conda` is the important part: the nextstrain-prot-titers-tree
+# submodule declares a per-rule `conda: environment.yml`, and without this its
+# scripts run in the ambient env and fail on `import Bio`.
+#
+# Usage, from the pipeline directory:
+#   snakemake --profile profiles/local
+executor: local
+cores: 4
+use-conda: true
+conda-frontend: conda
+latency-wait: 60

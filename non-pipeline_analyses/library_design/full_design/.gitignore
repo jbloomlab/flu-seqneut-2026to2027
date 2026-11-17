@@ -1,0 +1,17 @@
+results/*
+
+# Generated FASTAs under results/ only. Do NOT use a bare `*.fa`: that also silences
+# the committed outgroup inputs in data/, which config.yaml requires, leaving a fresh
+# clone unable to build the trees.
+results/**/*.fa
+
+!results/aggregated_library_strains
+results/aggregated_library_strains/*
+!results/aggregated_library_strains/library_strains.tsv
+
+!results/selected_haplotype_validation
+!results/curated_library
+!results/recent_haplotype_validation
+!results/site_annotations
+!results/tree/*.json
+!results/provisional_haplotypes
